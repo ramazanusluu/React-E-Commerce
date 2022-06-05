@@ -13,7 +13,7 @@ function Card({ item }) {
       overflow="hidden"
       p="3"
     >
-      <Link to="#/">
+      <Link to={`/product/${item._id}`}>
         <Image src={item.photos[0]} alt="product" loading="lazy"/>
         <Box p="6">
           <Box display="flex" alignItems="baseline">
