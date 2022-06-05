@@ -19,12 +19,12 @@ function Navbar() {
         </div>
         <div className={styles.right}>
           <Link to="/signin">
-            <Button colorScheme="gray" variant="outline">
+            <Button colorScheme="messenger" variant="outline">
               LOGIN
             </Button>
           </Link>
           <Link to="/signup">
-            <Button colorScheme="gray" variant="outline">
+            <Button colorScheme="messenger" variant="outline">
               REGISTER
             </Button>
           </Link>

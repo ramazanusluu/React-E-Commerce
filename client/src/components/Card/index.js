@@ -1,20 +1,28 @@
 import React from "react";
 import { Box, Image, Button } from "@chakra-ui/react";
+import moment from "moment";
 import { Link } from "react-router-dom";
 
-function Card() {
+function Card({ item }) {
   return (
-    <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p="3">
+    <Box
+      border="1px"
+      borderColor="ButtonFace"
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+      p="3"
+    >
       <Link to="#/">
-        <Image src="https://picsum.photos/id/2/400/200" alt="product" />
+        <Image src={item.photos[0]} alt="product" loading="lazy"/>
         <Box p="6">
           <Box display="flex" alignItems="baseline">
-            12/12/2022
+            {moment(item.createdAt).format("DD/MM/YYYY")}
           </Box>
           <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight">
-            Macbook Pro
+            {item.title}
           </Box>
-          <Box>100 TL</Box>
+          <Box>{item.price} TL</Box>
         </Box>
       </Link>
       <Button colorScheme="pink">Add To Basket</Button>
