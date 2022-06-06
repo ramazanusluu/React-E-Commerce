@@ -1,13 +1,28 @@
 import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import { Text, Button } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+
+  let navigate = useNavigate();
+
+  const handleLogout = async () => {
+    logout(() => {
+      navigate("/");
+    });
+  };
 
   return (
     <div>
-      <h1 >Profile</h1>
+      <Text fontSize="22">Profile</Text>
       <code>{JSON.stringify(user)}</code>
+      <br />
+      <br />
+      <Button colorScheme="red" variant="solid" onClick={handleLogout}>
+        LOGOUT
+      </Button>
     </div>
   );
 }
