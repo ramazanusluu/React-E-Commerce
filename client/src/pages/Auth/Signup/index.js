@@ -34,7 +34,7 @@ function Signup() {
           password: values.password,
         });
         login(registerResponse);
-        navigate("/profile");
+        navigate("/signin");
         console.log(registerResponse);
       } catch (error) {
         bag.setErrors({ general: error.response.data.message });
