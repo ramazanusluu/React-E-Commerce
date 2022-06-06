@@ -5,6 +5,7 @@ import "./Reset.css";
 import App from "./App";
 //Contexts
 import { AuthProvider } from "./contexts/AuthContext";
+import { BasketProvider } from "./contexts/BasketContext";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -27,7 +28,9 @@ root.render(
       <ChakraProvider>
         <BrowserRouter>
           <AuthProvider>
-            <App />
+            <BasketProvider>
+              <App />
+            </BasketProvider>
           </AuthProvider>
         </BrowserRouter>
       </ChakraProvider>
