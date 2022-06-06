@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import "./Reset.css";
 import App from "./App";
+//Contexts
+import { AuthProvider } from "./contexts/AuthContext";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -24,7 +26,9 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
         <BrowserRouter>
-          <App />
+          <AuthProvider>
+            <App />
+          </AuthProvider>
         </BrowserRouter>
       </ChakraProvider>
       <ReactQueryDevtools initialIsOpen={false} />
