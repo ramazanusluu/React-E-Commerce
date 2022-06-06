@@ -10,7 +10,7 @@ function Profile() {
 
   const handleLogout = async () => {
     logout(() => {
-      navigate("/");
+      navigate("/signup");
     });
   };
 
