@@ -1,13 +1,45 @@
-import React from "react";
-import { Alert, Box, Button, Image, Text } from "@chakra-ui/react";
+import { useRef, useState } from "react";
+import {
+  Alert,
+  Box,
+  Button,
+  Image,
+  Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  FormControl,
+  FormLabel,
+  Textarea,
+} from "@chakra-ui/react";
 import { useBasket } from "../../contexts/BasketContext";
 import { Link } from "react-router-dom";
+import { postOrder } from "../../api";
 
 function Basket() {
-  const { items, removeFromBasket } = useBasket();
-
+  const { items, removeFromBasket, emptyBasket } = useBasket();
   //reduce toplama işlemlerini yapabilir bir fonksiyon olarak düşünülebilir.
   const total = items.reduce((acc, obj) => acc + obj.price, 0);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const initialRef = useRef(null);
+  const [address, setAddress] = useState("");
+  const handleSubmitForm = async () => {
+    const itemIds = items.map((item) => item._id);
+    const input = {
+      address,
+      items: JSON.stringify(itemIds),
+    };
+    await postOrder(input);
+
+    emptyBasket();
+    onClose();
+  };
 
   return (
     <Box p="5">
@@ -42,6 +74,35 @@ function Basket() {
           <Box mt="10">
             <Text fontSize={22}>Total: {total} TL</Text>
           </Box>
+
+          <Button colorScheme="orange" onClick={onOpen}>
+            Order
+          </Button>
+          <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>ORDER</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody pb={6}>
+                <FormControl>
+                  <FormLabel>Address</FormLabel>
+                  <Textarea
+                    ref={initialRef}
+                    placeholder="Address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                </FormControl>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button colorScheme="red" mr={3} onClick={handleSubmitForm}>
+                  Save
+                </Button>
+                <Button onClick={onClose}>Cancel</Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </>
       )}
     </Box>
