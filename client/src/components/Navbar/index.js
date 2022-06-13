@@ -6,7 +6,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useBasket } from "../../contexts/BasketContext";
 
 function Navbar() {
-  const { loggedIn } = useAuth();
+  const { loggedIn, user } = useAuth();
   const { items } = useBasket();
 
   return (
@@ -26,12 +26,12 @@ function Navbar() {
           {!loggedIn && (
             <>
               <Link to="/signin">
-                <Button colorScheme="messenger" variant="outline">
+                <Button colorScheme="messenger" variant="ghost">
                   LOGIN
                 </Button>
               </Link>
               <Link to="/signup">
-                <Button colorScheme="messenger" variant="outline">
+                <Button colorScheme="messenger" variant="ghost">
                   REGISTER
                 </Button>
               </Link>
@@ -41,13 +41,20 @@ function Navbar() {
             <>
               {items.length > 0 && (
                 <Link to="/basket">
-                  <Button colorScheme="pink" variant="outline">
+                  <Button colorScheme="pink" variant="ghost">
                     Basket ({items.length})
                   </Button>
                 </Link>
               )}
+              {user?.role === "admin" && (
+                <Link to="/admin">
+                  <Button colorScheme="red" variant="ghost">
+                    Admin
+                  </Button>
+                </Link>
+              )}
               <Link to="/profile">
-                <Button colorScheme="whatsapp" variant="outline">
+                <Button colorScheme="whatsapp" variant="ghost">
                   Profile
                 </Button>
               </Link>
