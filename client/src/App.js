@@ -30,7 +30,14 @@ function App() {
             }
           />
           <Route path="/basket" element={<Basket />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route
+            path="/admin/*"
+            element={
+              <ProtectedRoute admin={true}>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<Error />} />
         </Routes>
       </div>
