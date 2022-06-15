@@ -1,7 +1,6 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import { fetchProduct, updateProduct } from "../../../api";
-import { useQuery } from "react-query";
+import { postProduct } from "../../../api";
+import { useMutation, useQueryClient } from "react-query";
 import { Formik, FieldArray } from "formik";
 import {
   Box,
@@ -15,41 +14,43 @@ import {
 import validationSchema from "./validations";
 import { message } from "antd";
 
-function ProductDetail() {
-  const { product_id } = useParams();
-  const { isLoading, isError, data, error } = useQuery(
-    ["admin:product", product_id],
-    () => fetchProduct(product_id)
-  );
+function NewProduct() {
+  const querClient = useQueryClient();
+  const newProductMutation = useMutation(postProduct, {
+    onSuccess: () => querClient.invalidateQueries("admin:products"),
+  });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    return <div>Error {error.message}</div>;
-  }
   const handleSubmit = async (values, bag) => {
+    console.log(values);
     message.loading({ content: "Loading...", key: "product_update" });
-    try {
-      await updateProduct(values, product_id);
-      message.success({
-        content: "The product successfully updated ",
-        key: "product_update",
-        duration: 2,
-      });
-    } catch (error) {
-      message.error("The product does not updated");
-    }
+
+    // values.photos = JSON.stringify(values.photos);
+
+    const newValues = {
+      ...values,
+      photos: JSON.stringify(values.photos),
+    };
+
+    newProductMutation.mutate(newValues, {
+      onSuccess: () => {
+        console.log("success");
+        message.success({
+          content: "The product successfully created",
+          key: "product_update",
+          duration: 2,
+        });
+      },
+    });
   };
   return (
     <div>
-      <Text fontSize="2xl">Edit</Text>
+      <Text fontSize="2xl">New Product</Text>
       <Formik
         initialValues={{
-          title: data.title,
-          description: data.description,
-          price: data.price,
-          photos: data.photos,
+          title: "Bilgisayar",
+          description: "Desctop",
+          price: "12000",
+          photos: [],
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -148,7 +149,7 @@ function ProductDetail() {
                     type="submit"
                     isLoading={isSubmitting}
                   >
-                    Update
+                    Save
                   </Button>
                 </form>
               </Box>
@@ -160,4 +161,4 @@ function ProductDetail() {
   );
 }
 
-export default ProductDetail;
+export default NewProduct;
